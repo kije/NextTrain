@@ -37,3 +37,6 @@ pebble_app.ld
 # Ignore other generated files
 serial_dump.txt
 
+
+# Mac OS X
+.DS_Store
