@@ -13,7 +13,9 @@ error_reporting(E_ALL);
 define('ENCODING', 'UTF-8');
 mb_internal_encoding(ENCODING);
 
+require_once INCROOT.'/db.php';
 require_once INCROOT.'/functions.php';
+
 
 
 define('PEBBLE_STATUS_KEY', 1);
