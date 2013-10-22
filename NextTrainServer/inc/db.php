@@ -1,19 +1,26 @@
 <?php
 
-// prepend a base path if Predis is not present in your "include_path".
+// replace this with your path to Predis
+require '/home/kije/pear/php/Predis/Autoloader.php';
 
-$client = require_once 'db_connect.php';
+Predis\Autoloader::register();
+
+class rDB {
 
 
-function store($key, $value, $ttl) {
-    $client->set($key, $value);
-    $client->expire($key, $ttl);
-}
+    static function store($key, $value, $ttl) {
+        $client = include 'db_connect.php';
+        $client->set($key, $value);
+        $client->expire($key, $ttl);
+    }
 
-function exists($key) {
-    return !!$client->exits($key);
-}
+    static function exists($key) {
+        $client = include 'db_connect.php';
+        return !!$client->exists($key);
+    }
 
-function retrive($key) {
-    return $client->get($key);
+    static function retrive($key) {
+        $client = include 'db_connect.php';
+        return $client->get($key);
+    }
 }

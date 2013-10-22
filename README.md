@@ -8,4 +8,14 @@ Due to the limited **JSON support** of the Pebble SDK and httpebble, and to redu
 ## Requirement
 You will need [Predis][1] in order to get this working. There will be a MySQL version in the future.
 
+
+## Installation
+First, install [Predis][1]. Then, clone this repository and run:
+
+    git checkout server
+
+Now, customize the paths in <code>NextTrainServer/inc/db.php</code> and <code>NextTrainServer/inc/db_connect.php</code>.
+
+
+
 [1]: https://github.com/nrk/predis

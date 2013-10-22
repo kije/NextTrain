@@ -8,16 +8,21 @@
  * @return String           The response
  */
 function get_url($url, $cache = false, $expire = 432000 /* 5 Days */) {
-    if (function_exists('curl_init')) {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
+    $key = sha1($url);
+    if (rDB::exists($key)) {
+        $response = rDB::retrive($key);
     } else {
-        $response = http_get($url);
-    }
+        if (function_exists('curl_init')) {
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $response = curl_exec($ch);
+        } else {
+            $response = http_get($url);
+        }
 
-    if ($cache) {
-        // cache to db
+        if ($cache) {
+            rDB::store($key, $response, $expire);
+        }
     }
 
 
@@ -69,7 +74,7 @@ function get_stationboard($locality, $limit = 3) {
     );
     $url = 'http://transport.opendata.ch/v1/stationboard?'.http_build_query($params);
 
-    if ($response = get_url($url)) {
+    if ($response = get_url($url, true, 60)) {
          if ($data = json_decode($response, true)) {
             if ($data['stationboard']) {
                 return $data['stationboard'];
