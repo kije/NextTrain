@@ -1,7 +1,7 @@
 <?php
 
 // prepend a base path if Predis is not present in your "include_path".
-
+/*
 $client = require_once 'db_connect.php';
 
 
@@ -16,4 +16,4 @@ function exists($key) {
 
 function retrive($key) {
     return $client->get($key);
-}
+}*/

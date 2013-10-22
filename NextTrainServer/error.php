@@ -4,5 +4,5 @@ require_once 'inc/globals.php';
 header('Content-Type: application/json');
 
 echo json_encode(array(
-    1 => http_response_code(),
+    PEBBLE_STATUS_KEY => http_response_code(),
 ));
