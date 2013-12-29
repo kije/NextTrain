@@ -1,11 +1,15 @@
 {
     "versionLabel": "1.0",
     "uuid": "60ff4779-e138-40ae-af9c-b54fcbaaaeea",
-    "appKeys": {},
+    "appKeys": {
+        "status": 1,
+        "error": 2
+    },
     "longName": "NextTrain",
     "versionCode": 1,
     "capabilities": [
-        ""
+        "location",
+        "configurable"
     ],
     "shortName": "NextTrain",
     "companyName": "kije-dev",
@@ -15,10 +19,25 @@
     "resources": {
         "media": [
             {
-                "menuIcon": true,
-                "type": "png-trans",
-                "name": "CUSTOM_APP_ICON",
-                "file": "images/icon.png"
+                "type": "font",
+                "name": "FONT_SANCHEZ_REGULAR_13",
+                "file": "fonts/Sanchez-Regular.ttf"
+            },
+            {
+                "characterRegex": "[0-9:EORLDING\\(\\)]",
+                "type": "font",
+                "name": "FONT_NOVAMONO_28",
+                "file": "fonts/NovaMono.ttf"
+            },
+            {
+                "type": "font",
+                "name": "FONT_SOURCESANSPRO_REGULAR_10",
+                "file": "fonts/SourceSansPro-Regular.ttf"
+            },
+            {
+                "type": "font",
+                "name": "FONT_SOURCESANSPRO_REGULAR_11",
+                "file": "fonts/SourceSansPro-Regular.ttf"
             }
         ]
     }
