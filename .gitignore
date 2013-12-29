@@ -40,3 +40,6 @@ serial_dump.txt
 
 # Mac OS X
 .DS_Store
+
+#fonts
+.ttf
