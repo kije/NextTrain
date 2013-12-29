@@ -8,13 +8,14 @@
         ""
     ],
     "shortName": "NextTrain",
-    "companyName": "kije",
+    "companyName": "kije-dev",
     "watchapp": {
-        "watchface": false
+        "watchface": true
     },
     "resources": {
         "media": [
             {
+                "menuIcon": true,
                 "type": "png-trans",
                 "name": "CUSTOM_APP_ICON",
                 "file": "images/icon.png"
