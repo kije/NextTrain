@@ -1,0 +1,24 @@
+{
+    "versionLabel": "1.0",
+    "uuid": "60ff4779-e138-40ae-af9c-b54fcbaaaeea",
+    "appKeys": {},
+    "longName": "NextTrain",
+    "versionCode": 1,
+    "capabilities": [
+        ""
+    ],
+    "shortName": "NextTrain",
+    "companyName": "kije",
+    "watchapp": {
+        "watchface": false
+    },
+    "resources": {
+        "media": [
+            {
+                "type": "png-trans",
+                "name": "CUSTOM_APP_ICON",
+                "file": "images/icon.png"
+            }
+        ]
+    }
+}
