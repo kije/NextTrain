@@ -21,7 +21,7 @@ $allowed_params = array(
 );
 
 
-$params = array_intersect_key($_POST, $allowed_params);
+$params = array_intersect_key($_GET, $allowed_params);
 
 
 if (array_key_exists('lat', $params) && array_key_exists('long', $params)) {
