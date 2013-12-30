@@ -2,26 +2,20 @@
 #define STATIONBOARD_H_INCLUDED
 
 #include "header.h"
-	
-#define PEBBLE_STATUS_KEY 1
-#define PEBBLE_ERROR_KEY 2
-#define PEBBLE_RESULT_START_KEY 10
-#define PEBBLE_RESULT_END_KEY 200
-#define PEBBLE_RESERVED_FIELDS_PER_RESULT 19
 
-// What information in PEBBLE_RESERVED_FIELDS_PER_RESULT is what
-#define PEBBLE_RESULT_NTH_SATION_NAME 0 
-#define PEBBLE_RESULT_NTH_DELAY 1
-#define PEBBLE_RESULT_NTH_PLATFORM 2
-#define PEBBLE_RESULT_NTH_TO 3
-#define PEBBLE_RESULT_NTH_CATEGORY 4
-#define PEBBLE_RESULT_NTH_DEPARTURE_HOUR 5
-#define PEBBLE_RESULT_NTH_DEPARTURE_MIN 6
-#define PEBBLE_RESULT_NTH_DEPARTURE_DST 7
-#define PEBBLE_RESULT_NTH_DEPARTURE_DAY 8
-#define PEBBLE_RESULT_NTH_DEPARTURE_MONTH 9
 	
 void init_stationboard(Window *window);
 void deinit_stationboard(void);
+
+typedef struct Departure Departure;
+
+struct Departure {
+	char *from;
+	char *to;
+	char *category;
+	struct tm time;
+	uint16_t delay;
+	uint16_t platform;
+};
 	
 #endif

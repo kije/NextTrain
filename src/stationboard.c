@@ -1,7 +1,9 @@
 #include "stationboard.h"
+#include "keys.h"
 
 Layer *stationboardLayer;
 InverterLayer *inverterLayer;
+Departure departures[3];
 
 
 static void out_sent_handler(DictionaryIterator *sent, void *context) {
@@ -18,19 +20,85 @@ static void out_failed_handler(DictionaryIterator *failed, AppMessageResult reas
 
 static void in_received_handler(DictionaryIterator *received, void *context) {
 	app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , __FUNCTION__);
-	// incoming message received
-	Tuple *status_tuple = dict_find(received, 1);
-
-	// Act on the found fields received
-	if (status_tuple) {
-		app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "Status: %d", status_tuple->value->uint16 );
+	
+	uint8_t buffer[512];
+	uint32_t size = sizeof(buffer);
+	Tuple *tuple = dict_read_begin_from_buffer(received, buffer, size);
+	
+	uint8_t num_departures = 0;
+	while (tuple != NULL && num_departures <= COUNT_OF(departures)) {
+		app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "KEY: %10lu", tuple->key); // unexpected keys: 1 -> 524622, 10 -> 536977380, etc... 
+		if (tuple->key < PEBBLE_RESULT_END_KEY){
+			if (tuple->key > PEBBLE_RESULT_START_KEY) {
+				
+				/*
+				struct Departure {
+					char *from;
+					char *to;
+					char *category;
+					struct tm *time;
+					uint16_t delay;
+					uint16_t platform;
+				};
+				*/
+				
+				switch ((tuple->key-PEBBLE_RESULT_START_KEY) % PEBBLE_RESERVED_FIELDS_PER_RESULT) {
+					case PEBBLE_RESULT_NTH_SATION_NAME:
+						departures[num_departures].from = tuple->value->cstring;
+						break;
+					
+					case PEBBLE_RESULT_NTH_DELAY:
+						departures[num_departures].delay = tuple->value->uint16;
+						break;
+					
+					case PEBBLE_RESULT_NTH_PLATFORM:
+						departures[num_departures].platform = tuple->value->uint16;
+						break;
+					
+					case PEBBLE_RESULT_NTH_TO:
+						departures[num_departures].to = tuple->value->cstring;
+						break;
+					
+					case PEBBLE_RESULT_NTH_CATEGORY:
+						departures[num_departures].category = tuple->value->cstring;
+						break;
+					
+					case PEBBLE_RESULT_NTH_DEPARTURE_HOUR:
+						departures[num_departures].time.tm_hour = tuple->value->int16;
+						break;
+					
+					case PEBBLE_RESULT_NTH_DEPARTURE_MIN:
+						departures[num_departures].time.tm_min = tuple->value->int16;
+						break;
+					
+					case PEBBLE_RESULT_NTH_DEPARTURE_DST:
+						departures[num_departures].time.tm_isdst = tuple->value->int16;
+						break;
+					
+					case PEBBLE_RESULT_NTH_DEPARTURE_DAY:
+						departures[num_departures].time.tm_mday = tuple->value->int16;
+						break;
+					
+					case PEBBLE_RESULT_NTH_DEPARTURE_MONTH:
+						departures[num_departures].time.tm_mon = tuple->value->int16;
+						break;
+				}
+				num_departures = (uint8_t)((tuple->key-PEBBLE_RESULT_START_KEY) / PEBBLE_RESERVED_FIELDS_PER_RESULT);
+				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "%s num_dep: %d", __FUNCTION__, num_departures);
+			}
+		} else {
+			//break;
+		}
+		//tuple->key
+		//tuple->value->data, tuple->length
+	  	tuple = dict_read_next(received);
 	}
 }
 
 
 static void in_dropped_handler(AppMessageResult reason, void *context) {
 	// incoming message dropped
-	app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "%s", (reason==APP_MSG_BUFFER_OVERFLOW ? "BUFFER_OVERFLOW": "nope") );
+	app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "%s Reason: %d", __FUNCTION__, reason);
 }
 
 static void stationboard_update_proc(Layer *layer, GContext *ctx) {

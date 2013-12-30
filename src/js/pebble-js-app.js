@@ -6,7 +6,9 @@ function onRequestLoad(e) {
 		if(req.status == 200) {
 			errorCount = 0;
 			var response = JSON.parse(req.responseText);
-			console.log(req.responseText);
+			
+			console.log(JSON.stringify(response));
+
 			var transactionId = Pebble.sendAppMessage( response,
 			  function(e) {
 				console.log("Successfully delivered message with transactionId="
