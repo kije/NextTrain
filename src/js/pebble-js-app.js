@@ -6,7 +6,18 @@ function onRequestLoad(e) {
 		if(req.status == 200) {
 			errorCount = 0;
 			var response = JSON.parse(req.responseText);
-			Pebble.sendAppMessage(response);
+			console.log(req.responseText);
+			var transactionId = Pebble.sendAppMessage( response,
+			  function(e) {
+				console.log("Successfully delivered message with transactionId="
+				  + e.data.transactionId);
+			  },
+			  function(e) {
+				console.log("Unable to deliver message with transactionId="
+				  + e.data.transactionId
+				  + " Error is: " + e.error.message);
+			  }
+			);
 		} else { 
 			console.log("Error");
 			errorCount++;
@@ -32,10 +43,10 @@ function updateData() {
 
 Pebble.addEventListener("ready", function(e) {
 	console.log("JavaScript app ready and running!");
-	console.warn("TO SAVE ENERGY ON DAYLY USE, REQUESTS ARE CURRENTLY DISABLED");
-	/*req = new XMLHttpRequest();
+	/*console.warn("TO SAVE ENERGY ON DAYLY USE, REQUESTS ARE CURRENTLY DISABLED");*/
+	req = new XMLHttpRequest();
 	req.onload = onRequestLoad;
-	updateData();*/
+	updateData();
 });
 
 Pebble.addEventListener("showConfiguration", function(e) {
