@@ -8,14 +8,27 @@ void init_stationboard(Window *window);
 void deinit_stationboard(void);
 
 typedef struct Departure Departure;
+typedef struct DepartureLayer DepartureLayer;
 
 struct Departure {
 	char *from;
 	char *to;
 	char *category;
-	struct tm time;
+	struct tm *time;
 	uint16_t delay;
-	uint16_t platform;
+	char *platform;
+};
+
+struct DepartureLayer {
+	Layer* rootLayer;
+	TextLayer* to;
+	TextLayer* from;
+	TextLayer* departureTime;
+	TextLayer* arivalTime;
+	TextLayer* delay;
+	TextLayer* category;
+	TextLayer* platform;
+	Departure departure;
 };
 	
 #endif

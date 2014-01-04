@@ -19,20 +19,15 @@
     "resources": {
         "media": [
             {
+                "type": "font",
+                "name": "FONT_SOURCESANSPRO_REGULAR_10",
+                "file": "fonts/SourceSansPro-Regular.ttf"
+            },
+            {
                 "menuIcon": true,
                 "type": "png",
                 "name": "IMAGE_ICON_TRAIN",
                 "file": "images/icon.png"
-            },
-            {
-                "type": "font",
-                "name": "FONT_SOURCESANSPRO_REGULAR_11",
-                "file": "fonts/SourceSansPro-Regular.ttf"
-            },
-            {
-                "type": "font",
-                "name": "FONT_SOURCESANSPRO_REGULAR_10",
-                "file": "fonts/SourceSansPro-Regular.ttf"
             },
             {
                 "characterRegex": "[0-9:EORLDING\\(\\)]",

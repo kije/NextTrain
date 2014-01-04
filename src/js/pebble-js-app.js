@@ -6,10 +6,13 @@ function onRequestLoad(e) {
 		if(req.status == 200) {
 			errorCount = 0;
 			var response = JSON.parse(req.responseText);
-			
-			console.log(JSON.stringify(response));
+			var message = {};
+			for (var key in response) {
+				message[parseInt(key)] = response[key];
+				console.log(parseInt(key) + ": "+ response[key]);
+			}
 
-			var transactionId = Pebble.sendAppMessage( response,
+			var transactionId = Pebble.sendAppMessage(message,
 			  function(e) {
 				console.log("Successfully delivered message with transactionId="
 				  + e.data.transactionId);
@@ -29,7 +32,7 @@ function onRequestLoad(e) {
 
 function processPosition(position) {
 	console.log("Prepare Request...");
-	var url = 'http://kije.cetus.uberspace.de/serv/NextTrain/NextTrainServer/?lat='+position.coords.latitude+'&long='+position.coords.longitude;
+	var url = 'https://kije.cetus.uberspace.de/serv/NextTrain/NextTrainServer/?lat='+position.coords.latitude+'&long='+position.coords.longitude;
 	req.open('GET', url, true);
 	console.log("Send Request...\nURL: "+url);
 	req.send(null);

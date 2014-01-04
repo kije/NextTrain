@@ -7,22 +7,10 @@
 Window *window;
 
 
-static void window_load(Window *window) {
-	
-}
-
-static void window_unload(Window *window) {
-	
-}
-
 static void init(void) {
 	app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "Init");
 	window = window_create();
 	window_set_background_color(window, GColorBlack);
-	window_set_window_handlers(window, (WindowHandlers) {
-		.load = window_load,
-		.unload = window_unload,
-	});
 	window_stack_push(window, true /* Animated */);
 	
 	
