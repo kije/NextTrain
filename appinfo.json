@@ -2,8 +2,13 @@
     "versionLabel": "1.0",
     "uuid": "60ff4779-e138-40ae-af9c-b54fcbaaaeea",
     "appKeys": {
-        "status": 1,
-        "error": 2
+        "category": 5,
+        "arival_time": 7,
+        "to": 4,
+        "delay": 2,
+        "platform": 3,
+        "station_name": 1,
+        "departure_time": 6
     },
     "longName": "NextTrain",
     "versionCode": 1,

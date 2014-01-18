@@ -10,5 +10,7 @@
 	
 #define foreach(x) for(uint16_t i = 0; i < COUNT_OF(x); i++)
 
+	
+#define changeEndian(x) (((x & 0x000000ff) << 24u) | ((x & 0x0000ff00) << 8u) | ((x & 0x00ff0000) >> 8u) | ((x & 0xff000000) >> 24u))
 
 #endif

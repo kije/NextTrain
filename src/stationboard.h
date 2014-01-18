@@ -14,7 +14,8 @@ struct Departure {
 	char *from;
 	char *to;
 	char *category;
-	struct tm *time;
+	struct tm *departureTime;
+	struct tm *arivalTime;
 	uint16_t delay;
 	char *platform;
 };
