@@ -8,8 +8,6 @@ TextLayer *loadingLayer;
 InverterLayer *inverterLayer;
 DepartureLayer departureLayers[4];
 
-static struct tm *t;
-static time_t now;
 
 uint8_t is_data_loaded = 0;
 
@@ -41,9 +39,9 @@ static void update_departure_layer_data(DepartureLayer *layer) {
 	strftime(departureTime_buffer, sizeof(departureTime_buffer), "%R",  data.departureTime);	
 	text_layer_set_text(layer->departureTime, departureTime_buffer);
 	
-	/*static char arivalTime_buffer[] = "00:00";	
+	static char arivalTime_buffer[] = "00:00";	
 	strftime(arivalTime_buffer, sizeof(arivalTime_buffer), "%R",  data.arivalTime);	
-	text_layer_set_text((*layer).arivalTime, arivalTime_buffer); */
+	text_layer_set_text((*layer).arivalTime, arivalTime_buffer); 
 	
 	static char delay_buffer[4];
 	if (data.delay != 0) {
@@ -72,8 +70,7 @@ static void departure_layer_root_update_proc(struct Layer *layer, GContext *ctx)
 
 
 static DepartureLayer departure_layer_create(GRect frame, uint16_t index) {
-	now = time(NULL);
-  	t = localtime(&now);
+	
 	DepartureLayer layer = (DepartureLayer) {
 		.rootLayer = layer_create(frame),
 		.from = text_layer_create_for_departure_layer(GRect(1,1,80,11), GTextAlignmentLeft),
@@ -84,12 +81,13 @@ static DepartureLayer departure_layer_create(GRect frame, uint16_t index) {
 		.category = text_layer_create_for_departure_layer(GRect(126,1,18,11), GTextAlignmentCenter),
 		.platform = text_layer_create_for_departure_layer(GRect(107,12,37,11), GTextAlignmentCenter),
 		.departure = (Departure){
-			.from = "",
-			.to = "",
-			.category = "",
-			.departureTime = t,
+			.from = (char *)malloc(35*sizeof(char)),
+			.to = (char *)malloc(35*sizeof(char)),
+			.category = (char *)malloc(3*sizeof(char)),
+			.departureTime = (struct tm*)malloc(sizeof(struct tm)),
+			.arivalTime = (struct tm*)malloc(sizeof(struct tm)),
 			.delay = 0,
-			.platform = ""
+			.platform = (char *)malloc(9*sizeof(char))
 		}
 	};
 	
@@ -142,20 +140,6 @@ static void out_failed_handler(DictionaryIterator *failed, AppMessageResult reas
 	app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , __FUNCTION__);
 }
 
-static char* getTupleType(Tuple *tuple) {
-	return (
-		tuple->type == TUPLE_BYTE_ARRAY ? "TUPLE_BYTE_ARRAY" : (
-			tuple->type == TUPLE_UINT ? "TUPLE_UINT" : (
-				tuple->type == TUPLE_CSTRING ? "TUPLE_CSTRING" : (
-					tuple->type == TUPLE_UINT ? "TUPLE_INT" : "UNKNOWN"
-				)
-			)
-		)
-	);
-}
-
-
-
 
 static void in_received_handler(DictionaryIterator *received, void *context) {
 	uint8_t index = data_loads%COUNT_OF(departureLayers);
@@ -164,58 +148,47 @@ static void in_received_handler(DictionaryIterator *received, void *context) {
 	Tuple *tuple = dict_read_first(received);
 	time_t time;
 	do {
-		app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "KEY: %li", tuple->key);
+		app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "KEY: %li, Adress: %p", tuple->key, &tuple);
 		switch (tuple->key) {
 			case PEBBLE_JS_STATION_NAME:
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "VAL: %s, TYPE: %s", tuple->value->cstring, getTupleType(tuple));
-				departureLayers[index].departure.from = tuple->value->cstring;
+				memmove(departureLayers[index].departure.from, tuple->value->cstring, COUNT_OF(departureLayers[index].departure.from) * sizeof(departureLayers[index].departure.from));
+				//*departureLayers[index].departure.from = *tuple->value->cstring;
 			break;
 			
 			case PEBBLE_JS_DELAY:
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "VAL: %d, TYPE: %s", tuple->value->uint16, getTupleType(tuple));
 				departureLayers[index].departure.delay = tuple->value->uint16;
 			break;
 			
 			case PEBBLE_JS_PLATFORM:
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "VAL: %s, TYPE: %s", tuple->value->cstring, getTupleType(tuple));
-				departureLayers[index].departure.platform = tuple->value->cstring;
+				memmove(departureLayers[index].departure.platform, tuple->value->cstring, COUNT_OF(departureLayers[index].departure.platform) * sizeof(departureLayers[index].departure.platform));
 			break;
 			
 			case PEBBLE_JS_TO:
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "VAL: %s, TYPE: %s", tuple->value->cstring, getTupleType(tuple));
-				departureLayers[index].departure.to = tuple->value->cstring;
+				memmove(departureLayers[index].departure.to, tuple->value->cstring, COUNT_OF(departureLayers[index].departure.to) * sizeof(departureLayers[index].departure.to));
 			break;
 			
 			case PEBBLE_JS_CATEGORY:
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "VAL: %s, TYPE: %s", tuple->value->cstring, getTupleType(tuple));
-				departureLayers[index].departure.category = tuple->value->cstring;
+				memmove(departureLayers[index].departure.category, tuple->value->cstring, COUNT_OF(departureLayers[index].departure.category) * sizeof(departureLayers[index].departure.category));
 			break;
 			
 			case PEBBLE_JS_DEPARTURE_TIME:
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "VAL: %li, TYPE: %s", tuple->value->int32, getTupleType(tuple));
 				time = tuple->value->int32;
-				free(departureLayers[index].departure.departureTime);
-				departureLayers[index].departure.departureTime = (struct tm*)malloc(sizeof(struct tm*));
+
+				*departureLayers[index].departure.departureTime = *localtime(&time);
 				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "Address: %p Size: %d", departureLayers[index].departure.departureTime, sizeof(departureLayers[index].departure.departureTime));
-				departureLayers[index].departure.departureTime = (struct tm*)memcpy(departureLayers[index].departure.departureTime, localtime(&time), sizeof(struct tm*));
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "Address: %p Size: %d", departureLayers[index].departure.departureTime, sizeof(departureLayers[index].departure.departureTime));
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "Address: %p ", localtime(&time));
-				//*departureLayers[index].departure.departureTime = localtime(&time);
-	
+				
 				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "time: %d:%d", departureLayers[index].departure.departureTime->tm_hour, departureLayers[index].departure.departureTime->tm_min);
 			break;
 			
 			case PEBBLE_JS_ARIVAL_TIME:
-				app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "VAL: %li, TYPE: %s", tuple->value->int32, getTupleType(tuple));
 				time = tuple->value->int32;
-				departureLayers[index].departure.arivalTime = localtime(&time);
+				*departureLayers[index].departure.arivalTime = *localtime(&time);
 			
 			break;
 		} 
-		
 	} while ((tuple = dict_read_next(received)) != NULL);
 	
-	
+	free(tuple);
 
 	is_data_loaded = 1;
 	layer_set_hidden(text_layer_get_layer(loadingLayer), true);
@@ -253,7 +226,7 @@ void init_stationboard(Window *window) {
 	loadingLayer = text_layer_create(departuresBounds);
 	text_layer_set_background_color(loadingLayer, GColorClear);
 	text_layer_set_font(loadingLayer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_SANCHEZ_REGULAR_13)));
-	text_layer_set_text(loadingLayer, "Laden ...");
+	text_layer_set_text(loadingLayer, "Lade... \n\n© by kije\n\nDaten: transport.opendata.ch");
 	text_layer_set_text_alignment(loadingLayer, GTextAlignmentCenter);
 	text_layer_set_text_color(loadingLayer, GColorWhite);
 	layer_add_child(stationboardLayer, text_layer_get_layer(loadingLayer));
@@ -269,8 +242,8 @@ void init_stationboard(Window *window) {
 	app_message_register_outbox_failed(out_failed_handler);
 	
 	
-	const uint32_t inbound_size = 1024;
-	const uint32_t outbound_size = 1024;
+	const uint32_t inbound_size = 512;
+	const uint32_t outbound_size = 512;
 	app_message_open(inbound_size, outbound_size);
 }
 
@@ -282,7 +255,6 @@ void deinit_stationboard(void) {
 	inverter_layer_destroy(inverterLayer);
 	
 	app_message_deregister_callbacks();
-	free(t);
 	foreach(departureLayers) {
 		departure_layer_destroy(&departureLayers[i]);
 	}
