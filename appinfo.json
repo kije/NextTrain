@@ -25,14 +25,8 @@
         "media": [
             {
                 "type": "font",
-                "name": "FONT_SOURCESANSPRO_REGULAR_10",
-                "file": "fonts/SourceSansPro-Regular.ttf"
-            },
-            {
-                "menuIcon": true,
-                "type": "png",
-                "name": "IMAGE_ICON_TRAIN",
-                "file": "images/icon.png"
+                "name": "FONT_SANCHEZ_REGULAR_13",
+                "file": "fonts/Sanchez-Regular.ttf"
             },
             {
                 "characterRegex": "[0-9:EORLDING\\(\\)]",
@@ -41,9 +35,15 @@
                 "file": "fonts/NovaMono.ttf"
             },
             {
+                "menuIcon": true,
+                "type": "png",
+                "name": "IMAGE_ICON_TRAIN",
+                "file": "images/icon.png"
+            },
+            {
                 "type": "font",
-                "name": "FONT_SANCHEZ_REGULAR_13",
-                "file": "fonts/Sanchez-Regular.ttf"
+                "name": "FONT_SOURCESANSPRO_REGULAR_10",
+                "file": "fonts/SourceSansPro-Regular.ttf"
             }
         ]
     }
