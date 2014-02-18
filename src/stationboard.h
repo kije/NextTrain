@@ -18,8 +18,11 @@ struct Departure {
 	struct tm *arivalTime;
 	uint16_t delay;
 	char *platform;
+	// buffers
 	char *arival_time_buffer;
 	char *departure_time_buffer;
+	char *delay_buffer;
+	char *platform_buffer;
 };
 
 struct DepartureLayer {

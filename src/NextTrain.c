@@ -20,8 +20,8 @@ static void init(void) {
 	
 void deinit(void) {
 	app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "Deinit");
-	deinit_stationboard();
 	deinit_clock();
+	deinit_stationboard();
 	window_destroy(window);
 }
 

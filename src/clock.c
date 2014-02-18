@@ -33,10 +33,10 @@ static void handle_second_tick(struct tm *tick_time, TimeUnits units_changed) {
 
 void init_clock(Window *window) {
 	app_log(APP_LOG_LEVEL_DEBUG, __FILE__ , __LINE__ , "Init clock");
-	timeLayer = text_layer_create(GRect(0,3,144,29));
+	timeLayer = text_layer_create(GRect(0,1,144,29));
 	text_layer_set_text_alignment(timeLayer, GTextAlignmentCenter);
     text_layer_set_text(timeLayer, "12:34:56");
-    text_layer_set_font(timeLayer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_NOVAMONO_28)));
+    text_layer_set_font(timeLayer, fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_UBUNTU_MONO_BOLD_29)));
 	text_layer_set_background_color(timeLayer, GColorClear);
     text_layer_set_text_color(timeLayer, GColorWhite);
     layer_add_child(window_get_root_layer(window), text_layer_get_layer(timeLayer));
@@ -58,5 +58,7 @@ void deinit_clock(void) {
 	tick_timer_service_unsubscribe();
 	text_layer_destroy(timeLayer);
 	text_layer_destroy(dateLayer);
+	
+	
 	free(t);
 } 

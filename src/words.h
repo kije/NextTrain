@@ -2,13 +2,13 @@
 #define WORDS_H_INCLUDED
 
 const char* const DAYS[] = {
-	"Sonntag",
-	"Montag", 
-	"Dienstag", 
-	"Mittwoch", 
-	"Donnerstag", 
-	"Freitag", 
-	"Samstag"
+	"Sunntig",
+	"Mäntig", 
+	"Dsischdig", 
+	"Mittwuch", 
+	"Dunschdig", 
+	"Friitig", 
+	"Samschtig"
 };
 
 const char* const MONTHS[] = {

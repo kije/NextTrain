@@ -1,20 +1,21 @@
 {
-    "versionLabel": "1.0",
+    "versionLabel": "1",
     "uuid": "60ff4779-e138-40ae-af9c-b54fcbaaaeea",
     "appKeys": {
-        "category": 5,
-        "arival_time": 7,
-        "to": 4,
-        "delay": 2,
-        "platform": 3,
-        "station_name": 1,
-        "departure_time": 6
+        "category": 6,
+        "arival_time": 8,
+        "to": 5,
+        "delay": 3,
+        "platform": 4,
+        "station_name": 2,
+        "message_type": 0,
+        "id": 1,
+        "departure_time": 7
     },
     "longName": "NextTrain",
     "versionCode": 1,
     "capabilities": [
-        "location",
-        "configurable"
+        "location"
     ],
     "shortName": "NextTrain",
     "companyName": "kije-dev",
@@ -24,26 +25,29 @@
     "resources": {
         "media": [
             {
+                "characterRegex": "[0-9:]",
+                "type": "font",
+                "name": "FONT_UBUNTU_MONO_BOLD_29",
+                "file": "fonts/UbuntuMono-B.ttf"
+            },
+            {
+                "characterRegex": "[a-zA-Z\u00e4\u00f6\u00fc\u00e9\u00e8\u00e0!:,\\.0-9()\\- \u2013\\+\u2026\\$\\?\u00c7\u00e7@\\\"\\\\/]",
+                "type": "font",
+                "name": "FONT_UBUNTU_9",
+                "file": "fonts/Ubuntu-Regular.ttf"
+            },
+            {
+                "trackingAdjust": 1,
+                "characterRegex": "[LSuntigM\u00e4DschwdFramJaebrzAplOkNov0-9,. \u2026]",
                 "type": "font",
                 "name": "FONT_SANCHEZ_REGULAR_13",
                 "file": "fonts/Sanchez-Regular.ttf"
-            },
-            {
-                "characterRegex": "[0-9:EORLDING\\(\\)]",
-                "type": "font",
-                "name": "FONT_NOVAMONO_28",
-                "file": "fonts/NovaMono.ttf"
             },
             {
                 "menuIcon": true,
                 "type": "png",
                 "name": "IMAGE_ICON_TRAIN",
                 "file": "images/icon.png"
-            },
-            {
-                "type": "font",
-                "name": "FONT_SOURCESANSPRO_REGULAR_10",
-                "file": "fonts/SourceSansPro-Regular.ttf"
             }
         ]
     }
